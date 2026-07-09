@@ -1,0 +1,84 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.card {
+  @apply rounded-xl border border-slate-200 bg-white p-5 shadow-sm;
+}
+
+.page-heading {
+  @apply rounded-xl border border-slate-200 bg-white p-5 shadow-sm;
+}
+
+.page-heading h2 {
+  @apply text-2xl font-bold text-slate-900;
+}
+
+.page-heading p {
+  @apply mt-1 text-slate-500;
+}
+
+.section-heading {
+  @apply text-lg font-bold text-slate-900;
+}
+
+.list-row {
+  @apply rounded-md bg-slate-100 px-3 py-2;
+}
+
+.input-box {
+  @apply w-full rounded-md border border-slate-300 bg-white px-3 py-2 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100;
+}
+
+.primary-btn {
+  @apply rounded-md bg-blue-600 px-4 py-2 font-semibold text-white hover:bg-blue-700;
+}
+
+.secondary-btn {
+  @apply rounded-md bg-slate-200 px-3 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-300;
+}
+
+.app-table {
+  @apply w-full min-w-[650px] border-collapse text-left text-sm;
+}
+
+.app-table th {
+  @apply border-b border-slate-200 bg-slate-100 px-4 py-3 font-bold text-slate-700;
+}
+
+.app-table td {
+  @apply border-b border-slate-100 px-4 py-3 text-slate-700;
+}
+
+.status-active {
+  @apply rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-700;
+}
+
+.status-pending {
+  @apply rounded-full bg-amber-100 px-3 py-1 text-xs font-bold text-amber-700;
+}
+
+.status-absent {
+  @apply rounded-full bg-rose-100 px-3 py-1 text-xs font-bold text-rose-700;
+}
