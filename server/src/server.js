@@ -3,16 +3,29 @@ import dotenv from "dotenv";
 import express from "express";
 import connectDB from "./config/db.js";
 import errorHandler from "./middleware/errorHandler.js";
+import authRoutes from "./routes/authRoutes.js";
 import healthRoutes from "./routes/healthRoutes.js";
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const allowedOrigins = [
+  process.env.CLIENT_URL || "http://127.0.0.1:5173",
+  "http://localhost:5173",
+  "http://127.0.0.1:5173"
+];
 
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "http://127.0.0.1:5173"
+    origin(origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+        return;
+      }
+
+      callback(new Error("Not allowed by CORS"));
+    }
   })
 );
 app.use(express.json());
@@ -26,6 +39,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/health", healthRoutes);
+app.use("/api/auth", authRoutes);
 
 app.use((req, res) => {
   res.status(404).json({

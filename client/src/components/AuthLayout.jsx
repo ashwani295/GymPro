@@ -4,7 +4,7 @@ export default function AuthLayout() {
   return (
     <main className="grid min-h-screen bg-slate-100 lg:grid-cols-2">
       <section className="flex flex-col justify-center bg-slate-900 px-8 py-12 text-white">
-        <Link to="/dashboard" className="mb-8 text-3xl font-bold">
+        <Link to="/auth/login" className="mb-8 text-3xl font-bold">
           GymPro
         </Link>
 

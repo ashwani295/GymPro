@@ -1,6 +1,7 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import AppLayout from "../components/AppLayout.jsx";
 import AuthLayout from "../components/AuthLayout.jsx";
+import ProtectedRoute from "../components/ProtectedRoute.jsx";
 import Attendance from "../pages/Attendance.jsx";
 import Dashboard from "../pages/Dashboard.jsx";
 import Login from "../pages/Login.jsx";
@@ -11,27 +12,32 @@ import Workouts from "../pages/Workouts.jsx";
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <AppLayout />,
+    element: <ProtectedRoute />,
     children: [
       {
-        index: true,
-        element: <Navigate to="/dashboard" replace />
-      },
-      {
-        path: "dashboard",
-        element: <Dashboard />
-      },
-      {
-        path: "members",
-        element: <Members />
-      },
-      {
-        path: "attendance",
-        element: <Attendance />
-      },
-      {
-        path: "workouts",
-        element: <Workouts />
+        element: <AppLayout />,
+        children: [
+          {
+            index: true,
+            element: <Navigate to="/dashboard" replace />
+          },
+          {
+            path: "dashboard",
+            element: <Dashboard />
+          },
+          {
+            path: "members",
+            element: <Members />
+          },
+          {
+            path: "attendance",
+            element: <Attendance />
+          },
+          {
+            path: "workouts",
+            element: <Workouts />
+          }
+        ]
       }
     ]
   },
