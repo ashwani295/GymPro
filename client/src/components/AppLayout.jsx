@@ -6,7 +6,8 @@ const navItems = [
   { to: "/dashboard", label: "Dashboard" },
   { to: "/members", label: "Members" },
   { to: "/attendance", label: "Attendance" },
-  { to: "/workouts", label: "Workouts" }
+  { to: "/workouts", label: "Workouts" },
+  { to: "/progress", label: "Progress" }
 ];
 
 export default function AppLayout() {
@@ -56,7 +57,7 @@ export default function AppLayout() {
       </main>
 
       <footer className="border-t border-slate-200 py-5 text-center text-sm text-slate-500">
-        <p>React course project - frontend data is stored with React state for now.</p>
+        <p>GymPro dashboard powered by React, Express, MongoDB, JWT, and Recharts.</p>
       </footer>
     </div>
   );

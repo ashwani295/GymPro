@@ -3,8 +3,14 @@ import dotenv from "dotenv";
 import express from "express";
 import connectDB from "./config/db.js";
 import errorHandler from "./middleware/errorHandler.js";
+import attendanceRoutes from "./routes/attendanceRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import healthRoutes from "./routes/healthRoutes.js";
+import memberRoutes from "./routes/memberRoutes.js";
+import membershipRoutes from "./routes/membershipRoutes.js";
+import progressRoutes from "./routes/progressRoutes.js";
+import trainerRoutes from "./routes/trainerRoutes.js";
+import workoutRoutes from "./routes/workoutRoutes.js";
 
 dotenv.config();
 
@@ -40,6 +46,12 @@ app.get("/", (req, res) => {
 
 app.use("/api/health", healthRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/memberships", membershipRoutes);
+app.use("/api/trainers", trainerRoutes);
+app.use("/api/members", memberRoutes);
+app.use("/api/workouts", workoutRoutes);
+app.use("/api/attendance", attendanceRoutes);
+app.use("/api/progress", progressRoutes);
 
 app.use((req, res) => {
   res.status(404).json({

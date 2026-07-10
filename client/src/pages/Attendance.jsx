@@ -1,48 +1,104 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { apiRequest } from "../services/api.js";
 
-const initialAttendance = [
-  { id: 1, name: "Ravi Kumar", plan: "Gold", present: true },
-  { id: 2, name: "Priya Singh", plan: "Silver", present: true },
-  { id: 3, name: "Arjun Mehta", plan: "Basic", present: false },
-  { id: 4, name: "Sneha Patel", plan: "Platinum", present: true }
-];
+function todayValue() {
+  return new Date().toISOString().slice(0, 10);
+}
 
 export default function Attendance() {
-  const [attendance, setAttendance] = useState(initialAttendance);
+  const [members, setMembers] = useState([]);
+  const [attendance, setAttendance] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(todayValue());
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
-  const presentCount = attendance.filter((member) => member.present).length;
+  const attendanceByMember = useMemo(() => {
+    return attendance.reduce((records, item) => {
+      const memberId = item.member?._id || item.member;
+      records[memberId] = item;
+      return records;
+    }, {});
+  }, [attendance]);
 
-  function toggleAttendance(id) {
-    const updatedAttendance = attendance.map((member) => {
-      if (member.id === id) {
-        return { ...member, present: !member.present };
-      }
+  const presentCount = attendance.filter((item) => item.status === "Present").length;
 
-      return member;
-    });
+  async function loadAttendanceData(date = selectedDate) {
+    setError("");
+    setIsLoading(true);
 
-    setAttendance(updatedAttendance);
+    try {
+      const [memberData, attendanceData] = await Promise.all([
+        apiRequest("/members"),
+        apiRequest(`/attendance?date=${date}`)
+      ]);
+
+      setMembers(memberData.members || []);
+      setAttendance(attendanceData.attendance || []);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    loadAttendanceData(selectedDate);
+  }, [selectedDate]);
+
+  async function markAttendance(memberId, nextStatus) {
+    setError("");
+
+    try {
+      const data = await apiRequest("/attendance", {
+        method: "POST",
+        body: JSON.stringify({
+          member: memberId,
+          date: selectedDate,
+          status: nextStatus
+        })
+      });
+
+      const existing = attendance.some((item) => (item.member?._id || item.member) === memberId);
+      setAttendance(
+        existing
+          ? attendance.map((item) => ((item.member?._id || item.member) === memberId ? data.attendance : item))
+          : [data.attendance, ...attendance]
+      );
+    } catch (err) {
+      setError(err.message);
+    }
   }
 
   return (
     <div className="space-y-6">
       <section className="page-heading">
         <h2>Attendance</h2>
-        <p>Mark members present or absent. This is frontend-only data for now.</p>
+        <p>Mark daily attendance and review present or absent members.</p>
       </section>
 
-      <section className="grid gap-4 sm:grid-cols-3">
+      {error ? <p className="alert-error">{error}</p> : null}
+
+      <section className="grid gap-4 sm:grid-cols-4">
+        <label className="card sm:col-span-1">
+          <span className="text-sm font-semibold text-slate-500">Attendance Date</span>
+          <input
+            type="date"
+            value={selectedDate}
+            onChange={(event) => setSelectedDate(event.target.value)}
+            className="input-box mt-2"
+          />
+        </label>
         <div className="card">
           <p className="text-sm font-semibold text-slate-500">Total Members</p>
-          <h3 className="mt-2 text-3xl font-bold">{attendance.length}</h3>
+          <h3 className="mt-2 text-3xl font-bold">{members.length}</h3>
         </div>
         <div className="card">
-          <p className="text-sm font-semibold text-slate-500">Present Today</p>
+          <p className="text-sm font-semibold text-slate-500">Present</p>
           <h3 className="mt-2 text-3xl font-bold text-emerald-600">{presentCount}</h3>
         </div>
         <div className="card">
-          <p className="text-sm font-semibold text-slate-500">Absent Today</p>
-          <h3 className="mt-2 text-3xl font-bold text-rose-600">{attendance.length - presentCount}</h3>
+          <p className="text-sm font-semibold text-slate-500">Absent</p>
+          <h3 className="mt-2 text-3xl font-bold text-rose-600">{members.length - presentCount}</h3>
         </div>
       </section>
 
@@ -53,32 +109,45 @@ export default function Attendance() {
             <thead>
               <tr>
                 <th>Member</th>
-                <th>Plan</th>
+                <th>Membership</th>
                 <th>Status</th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>
-              {attendance.map((member) => (
-                <tr key={member.id}>
-                  <td>{member.name}</td>
-                  <td>{member.plan}</td>
-                  <td>
-                    <span className={member.present ? "status-active" : "status-absent"}>
-                      {member.present ? "Present" : "Absent"}
-                    </span>
-                  </td>
-                  <td>
-                    <button
-                      type="button"
-                      onClick={() => toggleAttendance(member.id)}
-                      className="secondary-btn"
-                    >
-                      Change Status
-                    </button>
+              {members.map((member) => {
+                const record = attendanceByMember[member._id];
+                const status = record?.status || "Absent";
+                const nextStatus = status === "Present" ? "Absent" : "Present";
+
+                return (
+                  <tr key={member._id}>
+                    <td>{member.name}</td>
+                    <td>{member.membership?.name || "No plan"}</td>
+                    <td>
+                      <span className={status === "Present" ? "status-active" : "status-absent"}>
+                        {status}
+                      </span>
+                    </td>
+                    <td>
+                      <button
+                        type="button"
+                        onClick={() => markAttendance(member._id, nextStatus)}
+                        className="secondary-btn"
+                      >
+                        Mark {nextStatus}
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
+              {!members.length ? (
+                <tr>
+                  <td colSpan="4" className="text-center">
+                    {isLoading ? "Loading attendance..." : "Add members before marking attendance."}
                   </td>
                 </tr>
-              ))}
+              ) : null}
             </tbody>
           </table>
         </div>
@@ -86,4 +155,3 @@ export default function Attendance() {
     </div>
   );
 }
-

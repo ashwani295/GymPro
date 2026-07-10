@@ -4,12 +4,12 @@ export async function apiRequest(endpoint, options = {}) {
   const token = localStorage.getItem("gympro_token");
 
   const response = await fetch(`${API_URL}${endpoint}`, {
+    ...options,
     headers: {
       "Content-Type": "application/json",
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...options.headers
-    },
-    ...options
+    }
   });
 
   const data = await response.json();

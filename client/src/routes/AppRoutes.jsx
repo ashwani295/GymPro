@@ -6,6 +6,7 @@ import Attendance from "../pages/Attendance.jsx";
 import Dashboard from "../pages/Dashboard.jsx";
 import Login from "../pages/Login.jsx";
 import Members from "../pages/Members.jsx";
+import Progress from "../pages/Progress.jsx";
 import Register from "../pages/Register.jsx";
 import Workouts from "../pages/Workouts.jsx";
 
@@ -36,6 +37,10 @@ export const router = createBrowserRouter([
           {
             path: "workouts",
             element: <Workouts />
+          },
+          {
+            path: "progress",
+            element: <Progress />
           }
         ]
       }
