@@ -1,6 +1,6 @@
+import { ArrowRight, Mail, ShieldCheck } from "lucide-react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
 
 export default function Login() {
@@ -34,13 +34,21 @@ export default function Login() {
   }
 
   return (
-    <div className="w-full max-w-md rounded-xl border bg-white p-6 shadow-sm">
-      <h2 className="text-2xl font-bold text-slate-900">Login</h2>
-      <p className="mt-1 text-slate-500">Admin can login here.</p>
+    <div className="card">
+      <div className="mb-6">
+        <p className="surface-title">
+          <ShieldCheck size={16} />
+          Secure login
+        </p>
+        <h2 className="mt-3 text-3xl font-black text-slate-950">Welcome back</h2>
+        <p className="mt-2 text-sm leading-6 text-slate-500">
+          Sign in to manage members, attendance, plans, trainers, and progress reports.
+        </p>
+      </div>
 
-      <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-        <label className="block text-sm font-semibold text-slate-700">
-          Email
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <label className="block text-sm font-bold text-slate-700">
+          Email address
           <input
             type="email"
             name="email"
@@ -52,7 +60,7 @@ export default function Login() {
           />
         </label>
 
-        <label className="block text-sm font-semibold text-slate-700">
+        <label className="block text-sm font-bold text-slate-700">
           Password
           <input
             type="password"
@@ -65,20 +73,18 @@ export default function Login() {
           />
         </label>
 
-        {error ? (
-          <p className="rounded-md bg-rose-50 px-3 py-2 text-sm font-semibold text-rose-700">
-            {error}
-          </p>
-        ) : null}
+        {error ? <p className="alert-error">{error}</p> : null}
 
-        <button type="submit" className="primary-btn w-full disabled:cursor-not-allowed disabled:bg-slate-400" disabled={isSubmitting}>
+        <button type="submit" className="primary-btn w-full" disabled={isSubmitting}>
           {isSubmitting ? "Logging in..." : "Login"}
+          <ArrowRight size={18} />
         </button>
       </form>
 
-      <p className="mt-5 text-center text-sm text-slate-500">
-        New gym admin?{" "}
-        <Link to="/auth/register" className="font-bold text-blue-600">
+      <p className="mt-5 flex items-center justify-center gap-2 text-center text-sm text-slate-500">
+        <Mail size={15} />
+        New gym admin?
+        <Link to="/auth/register" className="font-black text-emerald-700 hover:text-emerald-800">
           Create account
         </Link>
       </p>

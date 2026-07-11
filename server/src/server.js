@@ -16,16 +16,22 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const allowedOrigins = [
-  process.env.CLIENT_URL || "http://127.0.0.1:5173",
+const defaultOrigins = [
   "http://localhost:5173",
   "http://127.0.0.1:5173"
 ];
+const configuredOrigins = (process.env.CLIENT_URL || "")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+const allowedOrigins = new Set([...defaultOrigins, ...configuredOrigins]);
+
+app.set("trust proxy", 1);
 
 app.use(
   cors({
     origin(origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
+      if (!origin || allowedOrigins.has(origin)) {
         callback(null, true);
         return;
       }

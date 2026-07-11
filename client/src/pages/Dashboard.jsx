@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { Activity, BadgeCheck, Dumbbell, Sparkles, UsersRound } from "lucide-react";
 import {
   Bar,
   BarChart,
@@ -108,36 +109,50 @@ export default function Dashboard() {
       label: "Total Members",
       value: summary.members.length,
       helper: "Registered gym members",
-      color: "border-l-4 border-l-blue-500"
+      icon: UsersRound,
+      tone: "blue"
     },
     {
       label: "Trainers",
       value: summary.trainers.length,
       helper: "Trainer profiles",
-      color: "border-l-4 border-l-emerald-500"
+      icon: Activity,
+      tone: "emerald"
     },
     {
       label: "Membership Plans",
       value: summary.memberships.length,
       helper: "Active plan options",
-      color: "border-l-4 border-l-amber-500"
+      icon: BadgeCheck,
+      tone: "amber"
     },
     {
       label: "Workout Plans",
       value: summary.workouts.length,
       helper: "Assigned routines",
-      color: "border-l-4 border-l-rose-500"
+      icon: Dumbbell,
+      tone: "rose"
     }
   ];
 
   return (
     <div className="space-y-6">
-      <section className="rounded-lg bg-slate-950 px-6 py-8 text-white shadow-sm">
-        <p className="text-sm font-semibold uppercase tracking-wide text-emerald-300">Admin dashboard</p>
-        <h2 className="mt-2 text-3xl font-bold">Manage your gym from one place</h2>
-        <p className="mt-3 max-w-2xl text-slate-300">
-          Track memberships, trainers, attendance, workout plans, and member fitness progress.
-        </p>
+      <section className="overflow-hidden rounded-lg bg-slate-950 text-white shadow-[0_24px_70px_rgba(15,23,42,0.18)]">
+        <div className="relative px-6 py-8 sm:px-8">
+          <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(16,185,129,0.28),transparent_42%),radial-gradient(circle_at_86%_24%,rgba(245,158,11,0.24),transparent_18rem)]" />
+          <div className="relative">
+            <p className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-bold uppercase tracking-wide text-emerald-100">
+              <Sparkles size={15} />
+              Admin dashboard
+            </p>
+            <h2 className="mt-4 max-w-3xl text-3xl font-black leading-tight sm:text-4xl">
+              Manage memberships, coaching, attendance, and member progress from one workspace.
+            </h2>
+            <p className="mt-4 max-w-2xl text-sm leading-6 text-slate-300">
+              GymPro brings daily operations and performance reporting into a clean dashboard for gym admins.
+            </p>
+          </div>
+        </div>
       </section>
 
       {error ? <p className="alert-error">{error}</p> : null}
@@ -149,19 +164,28 @@ export default function Dashboard() {
             label={item.label}
             value={isLoading ? "..." : item.value}
             helper={item.helper}
-            color={item.color}
+            icon={item.icon}
+            tone={item.tone}
           />
         ))}
       </section>
 
       <section className="grid gap-5 lg:grid-cols-2">
         <div className="card">
-          <h3 className="section-heading">Attendance Overview</h3>
+          <div className="flex items-center justify-between gap-4">
+            <div>
+              <p className="surface-title">
+                <Activity size={16} />
+                Attendance
+              </p>
+              <h3 className="mt-2 text-xl font-black text-slate-950">Attendance Overview</h3>
+            </div>
+          </div>
           <div className="mt-4 h-72">
             {attendanceChart.length ? (
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={attendanceChart}>
-                  <CartesianGrid strokeDasharray="3 3" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
                   <XAxis dataKey="date" />
                   <YAxis allowDecimals={false} />
                   <Tooltip />
@@ -177,12 +201,18 @@ export default function Dashboard() {
         </div>
 
         <div className="card">
-          <h3 className="section-heading">Fitness Progress</h3>
+          <div>
+            <p className="surface-title">
+              <Sparkles size={16} />
+              Progress
+            </p>
+            <h3 className="mt-2 text-xl font-black text-slate-950">Fitness Progress</h3>
+          </div>
           <div className="mt-4 h-72">
             {progressChart.length ? (
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={progressChart}>
-                  <CartesianGrid strokeDasharray="3 3" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
                   <XAxis dataKey="date" />
                   <YAxis />
                   <Tooltip />
@@ -200,7 +230,11 @@ export default function Dashboard() {
 
       <section className="grid gap-5 lg:grid-cols-2">
         <div className="card">
-          <h3 className="section-heading">Trainer Assignments</h3>
+          <p className="surface-title">
+            <UsersRound size={16} />
+            Staffing
+          </p>
+          <h3 className="mt-2 text-xl font-black text-slate-950">Trainer Assignments</h3>
           <ul className="mt-4 space-y-3 text-slate-600">
             {summary.members.slice(0, 5).map((member) => (
               <li key={member._id} className="list-row flex items-center justify-between gap-3">
@@ -213,7 +247,11 @@ export default function Dashboard() {
         </div>
 
         <div className="card">
-          <h3 className="section-heading">Recent Workout Plans</h3>
+          <p className="surface-title">
+            <Dumbbell size={16} />
+            Training
+          </p>
+          <h3 className="mt-2 text-xl font-black text-slate-950">Recent Workout Plans</h3>
           <ul className="mt-4 space-y-3 text-slate-600">
             {summary.workouts.slice(0, 5).map((plan) => (
               <li key={plan._id} className="list-row flex items-center justify-between gap-3">

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Plus, Scale, TrendingUp } from "lucide-react";
 import { apiRequest } from "../services/api.js";
 
 const emptyProgress = {
@@ -68,7 +69,11 @@ export default function Progress() {
   return (
     <div className="space-y-6">
       <section className="page-heading">
-        <h2>Progress Tracking</h2>
+        <p className="surface-title">
+          <TrendingUp size={16} />
+          Fitness reports
+        </p>
+        <h2 className="mt-2">Progress Tracking</h2>
         <p>Record member weight, body fat, and progress notes over time.</p>
       </section>
 
@@ -116,6 +121,7 @@ export default function Progress() {
           max="100"
         />
         <button type="submit" className="primary-btn" disabled={!members.length}>
+          <Plus size={17} />
           Add Progress
         </button>
         <textarea
@@ -129,7 +135,11 @@ export default function Progress() {
       </form>
 
       <section className="card">
-        <h3 className="section-heading mb-4">Progress Records</h3>
+        <p className="surface-title">
+          <Scale size={16} />
+          Measurements
+        </p>
+        <h3 className="mb-4 mt-2 text-xl font-black text-slate-950">Progress Records</h3>
         <div className="overflow-x-auto">
           <table className="app-table">
             <thead>

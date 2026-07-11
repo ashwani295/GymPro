@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { BadgeCheck, Plus, Search, UserRoundPlus, UsersRound } from "lucide-react";
 import { apiRequest } from "../services/api.js";
 
 const emptyMember = {
@@ -153,7 +154,11 @@ export default function Members() {
   return (
     <div className="space-y-6">
       <section className="page-heading">
-        <h2>Members</h2>
+        <p className="surface-title">
+          <UsersRound size={16} />
+          Member operations
+        </p>
+        <h2 className="mt-2">Members</h2>
         <p>Manage plans, trainers, members, and trainer assignments from one place.</p>
       </section>
 
@@ -161,7 +166,13 @@ export default function Members() {
 
       <section className="grid gap-5 lg:grid-cols-2">
         <form onSubmit={addMembership} className="card space-y-4">
-          <h3 className="section-heading">Membership Plans</h3>
+          <div>
+            <p className="surface-title">
+              <BadgeCheck size={16} />
+              Plans
+            </p>
+            <h3 className="mt-2 text-xl font-black text-slate-950">Membership Plans</h3>
+          </div>
           <div className="grid gap-3 sm:grid-cols-2">
             <input
               type="text"
@@ -201,7 +212,10 @@ export default function Members() {
               className="input-box"
             />
           </div>
-          <button type="submit" className="primary-btn">Add Plan</button>
+          <button type="submit" className="primary-btn">
+            <Plus size={17} />
+            Add Plan
+          </button>
 
           <div className="space-y-2">
             {memberships.map((plan) => (
@@ -217,7 +231,13 @@ export default function Members() {
         </form>
 
         <form onSubmit={addTrainer} className="card space-y-4">
-          <h3 className="section-heading">Trainers</h3>
+          <div>
+            <p className="surface-title">
+              <UserRoundPlus size={16} />
+              Coaching
+            </p>
+            <h3 className="mt-2 text-xl font-black text-slate-950">Trainers</h3>
+          </div>
           <div className="grid gap-3 sm:grid-cols-2">
             <input
               type="text"
@@ -254,7 +274,10 @@ export default function Members() {
               className="input-box"
             />
           </div>
-          <button type="submit" className="primary-btn">Add Trainer</button>
+          <button type="submit" className="primary-btn">
+            <Plus size={17} />
+            Add Trainer
+          </button>
 
           <div className="space-y-2">
             {trainers.map((trainer) => (
@@ -298,19 +321,31 @@ export default function Members() {
             <option key={trainer._id} value={trainer._id}>{trainer.name}</option>
           ))}
         </select>
-        <button type="submit" className="primary-btn">Add Member</button>
+        <button type="submit" className="primary-btn">
+          <Plus size={17} />
+          Add Member
+        </button>
       </form>
 
       <div className="card">
         <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <h3 className="section-heading">Member List</h3>
-          <input
-            type="text"
-            placeholder="Search member"
-            value={search}
-            onChange={(event) => setSearch(event.target.value)}
-            className="input-box sm:max-w-xs"
-          />
+          <div>
+            <p className="surface-title">
+              <UsersRound size={16} />
+              Directory
+            </p>
+            <h3 className="mt-2 text-xl font-black text-slate-950">Member List</h3>
+          </div>
+          <label className="relative sm:max-w-xs">
+            <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={17} />
+            <input
+              type="text"
+              placeholder="Search member"
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+              className="input-box pl-10"
+            />
+          </label>
         </div>
 
         <div className="overflow-x-auto">

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { CalendarDays, Dumbbell, Plus, Target } from "lucide-react";
 import { apiRequest } from "../services/api.js";
 
 const emptyPlan = {
@@ -67,7 +68,11 @@ export default function Workouts() {
   return (
     <div className="space-y-6">
       <section className="page-heading">
-        <h2>Workout Plans</h2>
+        <p className="surface-title">
+          <Dumbbell size={16} />
+          Training programs
+        </p>
+        <h2 className="mt-2">Workout Plans</h2>
         <p>Create workout plans linked to members and trainers.</p>
       </section>
 
@@ -116,6 +121,7 @@ export default function Workouts() {
           rows="3"
         />
         <button type="submit" className="primary-btn md:col-span-2" disabled={!members.length}>
+          <Plus size={17} />
           Add Workout Plan
         </button>
       </form>
@@ -130,11 +136,13 @@ export default function Workouts() {
                   Trainer: {plan.trainer?.name || "Not assigned"}
                 </p>
               </div>
-              <span className="rounded-full bg-blue-100 px-3 py-1 text-xs font-bold text-blue-700">
+              <span className="inline-flex items-center gap-1 rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700 ring-1 ring-blue-100">
+                <Target size={13} />
                 {plan.goal}
               </span>
             </div>
-            <p className="mt-4 rounded-md bg-slate-100 px-3 py-2 text-sm text-slate-700">
+            <p className="mt-4 inline-flex items-center gap-2 rounded-lg bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-700">
+              <CalendarDays size={15} />
               Workout Days: {plan.days?.join(", ") || "Not scheduled"}
             </p>
             {plan.notes ? <p className="mt-3 text-sm text-slate-500">{plan.notes}</p> : null}

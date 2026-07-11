@@ -1,6 +1,6 @@
+import { ArrowRight, Building2, UserPlus } from "lucide-react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
 
 export default function Register() {
@@ -35,13 +35,21 @@ export default function Register() {
   }
 
   return (
-    <div className="w-full max-w-md rounded-xl border bg-white p-6 shadow-sm">
-      <h2 className="text-2xl font-bold text-slate-900">Register</h2>
-      <p className="mt-1 text-slate-500">Create a new admin account.</p>
+    <div className="card">
+      <div className="mb-6">
+        <p className="surface-title">
+          <UserPlus size={16} />
+          Create workspace
+        </p>
+        <h2 className="mt-3 text-3xl font-black text-slate-950">Start managing your gym</h2>
+        <p className="mt-2 text-sm leading-6 text-slate-500">
+          Create an admin profile and begin adding memberships, trainers, and members.
+        </p>
+      </div>
 
-      <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-        <label className="block text-sm font-semibold text-slate-700">
-          Name
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <label className="block text-sm font-bold text-slate-700">
+          Admin name
           <input
             type="text"
             name="name"
@@ -53,8 +61,8 @@ export default function Register() {
           />
         </label>
 
-        <label className="block text-sm font-semibold text-slate-700">
-          Email
+        <label className="block text-sm font-bold text-slate-700">
+          Email address
           <input
             type="email"
             name="email"
@@ -66,7 +74,7 @@ export default function Register() {
           />
         </label>
 
-        <label className="block text-sm font-semibold text-slate-700">
+        <label className="block text-sm font-bold text-slate-700">
           Password
           <input
             type="password"
@@ -80,20 +88,18 @@ export default function Register() {
           />
         </label>
 
-        {error ? (
-          <p className="rounded-md bg-rose-50 px-3 py-2 text-sm font-semibold text-rose-700">
-            {error}
-          </p>
-        ) : null}
+        {error ? <p className="alert-error">{error}</p> : null}
 
-        <button type="submit" className="primary-btn w-full disabled:cursor-not-allowed disabled:bg-slate-400" disabled={isSubmitting}>
-          {isSubmitting ? "Creating account..." : "Register"}
+        <button type="submit" className="primary-btn w-full" disabled={isSubmitting}>
+          {isSubmitting ? "Creating account..." : "Create account"}
+          <ArrowRight size={18} />
         </button>
       </form>
 
-      <p className="mt-5 text-center text-sm text-slate-500">
-        Already have an account?{" "}
-        <Link to="/auth/login" className="font-bold text-blue-600">
+      <p className="mt-5 flex items-center justify-center gap-2 text-center text-sm text-slate-500">
+        <Building2 size={15} />
+        Already registered?
+        <Link to="/auth/login" className="font-black text-emerald-700 hover:text-emerald-800">
           Login
         </Link>
       </p>
